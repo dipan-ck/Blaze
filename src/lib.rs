@@ -1,5 +1,6 @@
-use std::fs;
+use std::{fs, io::Write};
 
+use flate2::{Compression, write::ZlibEncoder};
 use sha1::{Digest, Sha1};
 
 pub fn init() {
@@ -29,5 +30,19 @@ pub fn create_blob_object(args: &Vec<String>) {
     let hash = hasher.finalize();
 
     let hex = format!("{:x}", hash);
-    println!("hash is : {hex}",);
+
+    let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
+    encoder.write_all(&blob).expect("zlib write failed");
+    let compressed_blob = encoder.finish().expect("zlib finish failed");
+
+    let folder = &hex[0..2];
+    let file = &hex[2..];
+
+    let dir_path = format!(".blitz/objects/{folder}");
+    let write_path = format!(".blitz/objects/{folder}/{file}");
+
+    fs::create_dir_all(dir_path).expect("failed to create the blob folder");
+    fs::write(write_path, compressed_blob).expect("something went wrong while creating the object");
+
+    println!("hash is : {hex}");
 }

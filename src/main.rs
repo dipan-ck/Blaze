@@ -1,10 +1,12 @@
-use blaze::init;
+use blaze::{create_blob_object, init};
 use std::env;
 
 fn main() {
-    let cmd: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
 
-    if cmd[1] == "init" {
+    if args[1] == "init" {
         init();
+    } else if args[1] == "hash" {
+        create_blob_object(&args);
     }
 }

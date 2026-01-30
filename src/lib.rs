@@ -2,6 +2,7 @@ use crate::{
     blob_object::{create_blob_object, hash_object},
     cat_file::cat_file,
     init::init,
+    ls_tree::ls_tree,
     tree_object::write_tree,
 };
 
@@ -9,6 +10,7 @@ pub mod blob_object;
 pub mod cat_file;
 pub mod compression;
 pub mod init;
+pub mod ls_tree;
 pub mod tree_object;
 
 /*
@@ -38,6 +40,7 @@ pub fn run(args: Vec<String>) {
         }
         [_, "cat-file", "-p", hash] => cat_file(hash),
         [_, "write-tree", path] => write_tree(path),
+        [_, "ls-tree", "--name-only", hash] => ls_tree(hash),
         _ => eprintln!("unknown command"),
     }
 }

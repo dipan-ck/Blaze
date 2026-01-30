@@ -60,7 +60,7 @@ pub fn hash_object(path: &str) {
 
 /*
  cargo run -- hash-object -w  hello.txt  in this command we run this function this creates the hash and also does the
- compression of the blob and sstoring the blobl Object
+ compression of the blob and storing the blob Object
 */
 pub fn create_blob_object(path: &str) -> (String, Vec<u8>) {
     let file_content = fs::read(path).expect("failed to read file");

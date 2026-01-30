@@ -1,6 +1,7 @@
-use flate2::{Compression, write::ZlibEncoder};
 use sha1::{Digest, Sha1};
-use std::{fs, io::Write};
+use std::fs;
+
+use crate::compression::compress_blob;
 
 /*
  The create_blob takes the file_content which is a array of raw bytes. Asd per git inner working it adds
@@ -29,17 +30,6 @@ fn hash_blob(blob: &Vec<u8>) -> String {
     let hash = hasher.finalize();
     let hex = format!("{:x}", hash);
     return hex;
-}
-
-/*
- This function takes the decompressed blob and persoms compression in it using the flate2 create
- which provides a zlib encoder the compressed blob is a vector of raw bytes
-*/
-fn compress_blob(blob: &Vec<u8>) -> Vec<u8> {
-    let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
-    encoder.write_all(&blob).expect("zlib write failed");
-    let compressed_blob = encoder.finish().expect("zlib finish failed");
-    return compressed_blob;
 }
 
 /*

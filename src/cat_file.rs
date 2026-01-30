@@ -1,8 +1,9 @@
-use flate2::read::ZlibDecoder;
 use std::{
     fs,
-    io::{self, Read, Write},
+    io::{self, Write},
 };
+
+use crate::compression::decompress_blob;
 
 /*
  This function is responsible for finding a Blog Object file by the hash provided to it as i said earlier if a hash
@@ -15,19 +16,6 @@ fn find_blob_by_hash(hash: &str) -> Vec<u8> {
     let path = format!(".blitz/objects/{folder}/{file}");
     let file = fs::read(path).expect("Unable to read Object from Hash");
     return file;
-}
-
-/*
-this used the zlib decompressor to decompress the raw bytes returned by the find_blob_by_hash function. It retuens a
-decompress verdsion of the blob which is also a vector of bytes
-*/
-fn decompress_blob(compressed: &[u8]) -> Vec<u8> {
-    let mut decoder = ZlibDecoder::new(compressed);
-    let mut decompressed = Vec::new();
-    decoder
-        .read_to_end(&mut decompressed)
-        .expect("zlib decompress failed");
-    return decompressed;
 }
 
 /*

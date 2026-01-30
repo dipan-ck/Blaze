@@ -1,11 +1,12 @@
 use crate::{
+    blob_object::{create_blob_object, hash_object},
     cat_file::cat_file,
-    hash_object::{create_blob_object, hash_object},
     init::init,
 };
 
+pub mod blob_object;
 pub mod cat_file;
-pub mod hash_object;
+pub mod compression;
 pub mod init;
 
 /*

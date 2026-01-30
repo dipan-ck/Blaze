@@ -24,12 +24,12 @@ fn create_blob(file_content: Vec<u8>) -> Vec<u8> {
 This function takes the decompressed blob and hashes it using the SHA1 algorithm now hasher.finalize return a
 vector of raw bytes so we use the format macro to convert it to a hex and return the hex version of the hash
  */
-fn hash_blob(blob: &Vec<u8>) -> String {
+fn hash_blob(blob: &Vec<u8>) -> (String, Vec<u8>) {
     let mut hasher = Sha1::new();
     hasher.update(&blob);
     let hash = hasher.finalize();
     let hex = format!("{:x}", hash);
-    return hex;
+    return (hex, hash.to_vec());
 }
 
 /*
@@ -56,7 +56,7 @@ fn create_object_dir(hash: &String, compressed_blob: Vec<u8>) {
 pub fn hash_object(path: &str) {
     let file_content = fs::read(path).expect("failed to read file");
     let blob = create_blob(file_content);
-    let hash = hash_blob(&blob);
+    let (hash, _) = hash_blob(&blob);
     println!("{hash}");
 }
 
@@ -64,10 +64,11 @@ pub fn hash_object(path: &str) {
  cargo run -- hash-object -w  hello.txt  in this command we run this function this creates the hash and also does the
  compression of the blob and sstoring the blobl Object
 */
-pub fn create_blob_object(path: &str) {
+pub fn create_blob_object(path: &str) -> (String, Vec<u8>) {
     let file_content = fs::read(path).expect("failed to read file");
     let blob = create_blob(file_content);
-    let hash = hash_blob(&blob);
+    let (hash, hash_bytes) = hash_blob(&blob);
     let compressed_blob = compress_blob(&blob);
     create_object_dir(&hash, compressed_blob);
+    return (hash, hash_bytes);
 }

@@ -2,12 +2,14 @@ use crate::{
     blob_object::{create_blob_object, hash_object},
     cat_file::cat_file,
     init::init,
+    tree_object::tree,
 };
 
 pub mod blob_object;
 pub mod cat_file;
 pub mod compression;
 pub mod init;
+pub mod tree_object;
 
 /*
 
@@ -30,8 +32,12 @@ pub fn run(args: Vec<String>) {
     match args.as_slice() {
         [_, "init"] => init(),
         [_, "hash-object", path] => hash_object(path),
-        [_, "hash-object", "-w", path] => create_blob_object(path),
+        [_, "hash-object", "-w", path] => {
+            let (hash, _) = create_blob_object(path);
+            println!("{hash}");
+        }
         [_, "cat-file", "-p", hash] => cat_file(hash),
+        [_, "write-tree", path] => tree(path),
         _ => eprintln!("unknown command"),
     }
 }

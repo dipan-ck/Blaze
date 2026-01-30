@@ -1,6 +1,7 @@
 use crate::{
     blob_object::{create_blob_object, hash_object},
     cat_file::cat_file,
+    commit_tree::initial_commit_tree,
     init::init,
     ls_tree::ls_tree,
     tree_object::write_tree,
@@ -8,6 +9,7 @@ use crate::{
 
 pub mod blob_object;
 pub mod cat_file;
+pub mod commit_tree;
 pub mod compression;
 pub mod init;
 pub mod ls_tree;
@@ -26,6 +28,8 @@ SUPPORTED COMMANDS:
  cargo run -- cat-file -p a7b9a1dcc3f3f148342270696dbbbea060b9f6b4   -> Gets the blobl Object from hash decompressed it and stdout's the output
 
 
+ cargo run -- commit-tree 31020dd853e5a1dbc1d5cec863744a2f0660e852 -m "first commit"
+
  */
 
 pub fn run(args: Vec<String>) {
@@ -41,6 +45,9 @@ pub fn run(args: Vec<String>) {
         [_, "cat-file", "-p", hash] => cat_file(hash),
         [_, "write-tree", path] => write_tree(path),
         [_, "ls-tree", "--name-only", hash] => ls_tree(hash),
+        [_, "commit-tree", tree_hash, "-m", commit_message] => {
+            initial_commit_tree(tree_hash, commit_message)
+        }
         _ => eprintln!("unknown command"),
     }
 }

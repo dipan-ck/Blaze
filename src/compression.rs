@@ -6,7 +6,7 @@ use std::io::{Read, Write};
  This function takes the decompressed blob and persoms compression in it using the flate2 create
  which provides a zlib encoder the compressed blob is a vector of raw bytes
 */
-pub fn compress_blob(blob: &Vec<u8>) -> Vec<u8> {
+pub fn compress(blob: &Vec<u8>) -> Vec<u8> {
     let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
     encoder.write_all(&blob).expect("zlib write failed");
     let compressed_blob = encoder.finish().expect("zlib finish failed");
@@ -17,7 +17,7 @@ pub fn compress_blob(blob: &Vec<u8>) -> Vec<u8> {
 this used the zlib decompressor to decompress the raw bytes returned by the find_blob_by_hash function. It retuens a
 decompress verdsion of the blob which is also a vector of bytes
 */
-pub fn decompress_blob(compressed: &[u8]) -> Vec<u8> {
+pub fn decompress(compressed: &[u8]) -> Vec<u8> {
     let mut decoder = ZlibDecoder::new(compressed);
     let mut decompressed = Vec::new();
     decoder

@@ -2,7 +2,7 @@ use crate::{
     blob_object::{create_blob_object, hash_object},
     cat_file::cat_file,
     init::init,
-    tree_object::tree,
+    tree_object::write_tree,
 };
 
 pub mod blob_object;
@@ -37,7 +37,7 @@ pub fn run(args: Vec<String>) {
             println!("{hash}");
         }
         [_, "cat-file", "-p", hash] => cat_file(hash),
-        [_, "write-tree", path] => tree(path),
+        [_, "write-tree", path] => write_tree(path),
         _ => eprintln!("unknown command"),
     }
 }

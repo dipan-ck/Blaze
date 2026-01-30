@@ -1,7 +1,7 @@
 use sha1::{Digest, Sha1};
 use std::fs;
 
-use crate::compression::compress_blob;
+use crate::compression::compress;
 
 /*
  The create_blob takes the file_content which is a array of raw bytes. Asd per git inner working it adds
@@ -24,7 +24,7 @@ fn create_blob(file_content: Vec<u8>) -> Vec<u8> {
 This function takes the decompressed blob and hashes it using the SHA1 algorithm now hasher.finalize return a
 vector of raw bytes so we use the format macro to convert it to a hex and return the hex version of the hash
  */
-fn hash_blob(blob: &Vec<u8>) -> (String, Vec<u8>) {
+pub fn hash(blob: &Vec<u8>) -> (String, Vec<u8>) {
     let mut hasher = Sha1::new();
     hasher.update(&blob);
     let hash = hasher.finalize();
@@ -45,8 +45,6 @@ fn create_object_dir(hash: &String, compressed_blob: Vec<u8>) {
 
     fs::create_dir_all(dir_path).expect("failed to create the blob folder");
     fs::write(write_path, compressed_blob).expect("something went wrong while creating the object");
-
-    println!("hash is : {hash}");
 }
 
 /*
@@ -56,7 +54,7 @@ fn create_object_dir(hash: &String, compressed_blob: Vec<u8>) {
 pub fn hash_object(path: &str) {
     let file_content = fs::read(path).expect("failed to read file");
     let blob = create_blob(file_content);
-    let (hash, _) = hash_blob(&blob);
+    let (hash, _) = hash(&blob);
     println!("{hash}");
 }
 
@@ -67,8 +65,8 @@ pub fn hash_object(path: &str) {
 pub fn create_blob_object(path: &str) -> (String, Vec<u8>) {
     let file_content = fs::read(path).expect("failed to read file");
     let blob = create_blob(file_content);
-    let (hash, hash_bytes) = hash_blob(&blob);
-    let compressed_blob = compress_blob(&blob);
+    let (hash, hash_bytes) = hash(&blob);
+    let compressed_blob = compress(&blob);
     create_object_dir(&hash, compressed_blob);
     return (hash, hash_bytes);
 }

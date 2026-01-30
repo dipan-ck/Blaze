@@ -3,7 +3,7 @@ use std::{
     io::{self, Write},
 };
 
-use crate::compression::decompress_blob;
+use crate::compression::decompress;
 
 /*
  This function is responsible for finding a Blog Object file by the hash provided to it as i said earlier if a hash
@@ -25,7 +25,7 @@ blob <size>\0<content> but user should not see it so we fin the null byte and se
 */
 pub fn cat_file(hash: &str) {
     let compressed_blob = find_blob_by_hash(hash);
-    let decompressed_blob = decompress_blob(&compressed_blob);
+    let decompressed_blob = decompress(&compressed_blob);
 
     let mut null_position: usize = 0;
 

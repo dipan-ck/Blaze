@@ -10,7 +10,7 @@ use crate::compression::decompress;
  for a object is a7b9a1dcc3f3f148342270696dbbbea060b9f6b4  the path for that object is .blitz/objects/a7/b9a1dcc3f3f148342270696dbbbea060b9f6b4 so
  this function's logic is to get the file read the raw bytes and retuen the raw bytes vector
 */
-fn find_blob_by_hash(hash: &str) -> Vec<u8> {
+pub fn find_blob_by_hash(hash: &str) -> Vec<u8> {
     let folder = &hash[0..2];
     let file = &hash[2..];
     let path = format!(".blitz/objects/{folder}/{file}");

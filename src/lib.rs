@@ -4,6 +4,7 @@ use crate::{
     commit_tree::{commit_tree, initial_commit_tree},
     init::init,
     ls_tree::ls_tree,
+    restore::restore,
     tree_object::write_tree,
 };
 
@@ -13,6 +14,7 @@ pub mod commit_tree;
 pub mod compression;
 pub mod init;
 pub mod ls_tree;
+pub mod restore;
 pub mod tree_object;
 
 /*
@@ -60,6 +62,7 @@ pub fn run(args: Vec<String>) {
             "-m",
             commit_message,
         ] => commit_tree(tree_hash, parent_commit_hash, commit_message),
+        [_, "restore", root_path] => restore(root_path),
 
         _ => eprintln!("unknown command"),
     }

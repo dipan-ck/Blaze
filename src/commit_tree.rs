@@ -29,6 +29,8 @@ committer John Doe <john@example.com> 1234567890 +0000\n\
     fs::create_dir_all(dir_path).unwrap();
     fs::write(write_path, compressed).unwrap();
 
+    make_commit_head(&hex);
+
     println!("{hex}");
 }
 
@@ -60,5 +62,11 @@ committer John Doe <john@example.com> 1234567890 +0000\n\
     fs::create_dir_all(dir_path).unwrap();
     fs::write(write_path, compressed).unwrap();
 
+    make_commit_head(&hex);
+
     println!("{hex}");
+}
+
+fn make_commit_head(hex: &str) {
+    fs::write(".blitz/HEAD", hex).unwrap();
 }

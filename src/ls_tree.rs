@@ -5,6 +5,7 @@ use std::{
 
 use crate::compression::decompress;
 
+//Takes the tree hash from the user reads the raw bytes which is compressed so, first we decompress it and then from tht decompressed we extrach the file and folder names
 pub fn ls_tree(hash: &str) {
     let dir = &hash[0..2];
     let file = &hash[2..];
@@ -24,6 +25,15 @@ pub fn ls_tree(hash: &str) {
     render_tree(headerless_content);
 }
 
+/*
+
+Takes out the file names from the headerless tree object file content. Below I have added a representaion to
+understand how the tree object looks we have added line breaks but in the file theree is none
+
+tree <size>\0                            //in render_tree this header is removed and then passed here
+<mode> <name>\0<20_byte_sha>
+<mode> <name>\0<20_byte_sha>
+*/
 fn render_tree(file_bytes: Vec<u8>) {
     let mut output: Vec<u8> = Vec::new();
 

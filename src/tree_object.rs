@@ -83,6 +83,13 @@ fn create_object_dir(hex: &String, compressed_blob: &Vec<u8>) {
    when the recursive tree ends and we get back to the first function call we already have  all tree objects built and the blobs too and then we just return
    the hex which is the root tree hash
 
+
+   Here is a represention of what each Tree Object Contains,  we have added line breaks for readability but in the file there will be none:
+
+   tree <size>\0
+   <mode> <name>\0<20_byte_sha>
+   <mode> <name>\0<20_byte_sha>
+
 */
 pub fn create_tree_object(dir_path: &str) -> (String, Vec<u8>) {
     let reader = fs::read_dir(dir_path).unwrap();

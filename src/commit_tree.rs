@@ -2,6 +2,7 @@ use std::fs;
 
 use crate::{blob_object::hash, compression::compress};
 
+//for the first commit we use this function where we dont add a parent hash in the body  of the commit Object
 pub fn initial_commit_tree(tree_hash: &str, commit_message: &str) {
     let body = format!(
         "tree {}\n\
@@ -34,6 +35,7 @@ committer John Doe <john@example.com> 1234567890 +0000\n\
     println!("{hex}");
 }
 
+//This is used after the initial commit as per the current implementation user needs to pass the previous commit hash along with the tree hash
 pub fn commit_tree(tree_sha: &str, parent_commit_sha: &str, commit_message: &str) {
     let body = format!(
         "tree {}\n\

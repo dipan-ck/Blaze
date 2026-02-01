@@ -1,7 +1,8 @@
-use blaze::run;
 use std::env;
 
+use blaze::run;
+
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let args = env::args().collect();
     run(args);
 }

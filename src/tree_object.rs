@@ -17,6 +17,7 @@ impl Entry {
     }
 }
 
+// with each entry in a Tree Object a mode is stored too and these modes helps us to rebuild the repo
 fn get_file_mode(is_dir: bool) -> String {
     if is_dir {
         "40000".to_string()
@@ -25,11 +26,13 @@ fn get_file_mode(is_dir: bool) -> String {
     }
 }
 
+//This is the entry function for the write-tree algorithm it takes the dir path and it will start taking taking folder structure snapshots from that path
 pub fn write_tree(dir_path: &str) {
     let (hex, _) = create_tree_object(dir_path);
     println!("{hex}");
 }
 
+//Creates the tree Object and return the raw uncompressed bytes of the tree Object
 fn generate_tree_object(tree_content: Vec<Entry>) -> Vec<u8> {
     let mut tree_object = Vec::new();
 
@@ -52,6 +55,7 @@ fn generate_tree_object(tree_content: Vec<Entry>) -> Vec<u8> {
     return tree_object;
 }
 
+//creates the blob Object
 fn create_object_dir(hex: &String, compressed_blob: &Vec<u8>) {
     let folder = &hex[0..2];
     let file = &hex[2..];
@@ -69,6 +73,17 @@ fn create_object_dir(hex: &String, compressed_blob: &Vec<u8>) {
     fs::write(write_path, compressed_blob).expect("something went wrong while creating the object");
 }
 
+/*
+
+   This is a recursive function that walks all directories and creates the files inside it and the moment it gets a
+   folder it again starts recursively walking that directory. While creating this algorithm I took a bottom up approach where we dont start making
+   the tree from the top directories and then moving to it's children directory instead we move directly  to the last directories these are the directories
+   that only have files. we create blob object for that files then after creating all the blobs we add the tree object header create the hash from that un
+   compressed content then we compress the tree content write it and send the tree hash we created back to the previous caller by, following this approach
+   when the recursive tree ends and we get back to the first function call we already have  all tree objects built and the blobs too and then we just return
+   the hex which is the root tree hash
+
+*/
 pub fn create_tree_object(dir_path: &str) -> (String, Vec<u8>) {
     let reader = fs::read_dir(dir_path).unwrap();
     let mut tree_content: Vec<Entry> = Vec::new();

@@ -31,9 +31,11 @@ SUPPORTED COMMANDS:
 
   cargo run -- write-tree test_repo -> Takes the current snapshor of the directory and creates the Tree Object
 
-  cargo run ls-tree --name-only 8edd88fd6e2babc215199c546ec5d36cc8ad0c26  -> Takes a Tree Object Hash and prints all the contnts of that tree object
+  cargo run ls-tree --name-only a798152e791914cc4ecf875bc2a3fa97be374717  -> Takes a Tree Object Hash and prints all the contnts of that tree object
 
- cargo run -- commit-tree 31020dd853e5a1dbc1d5cec863744a2f0660e852 -m "first commit"
+ cargo run -- commit-tree a798152e791914cc4ecf875bc2a3fa97be374717 -m "first commit"
+
+ cargo run -- restore test_repo
 
  */
 

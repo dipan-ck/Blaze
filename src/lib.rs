@@ -11,7 +11,6 @@ use crate::{
 
 pub mod blob_object;
 pub mod cat_file;
-pub mod clone;
 pub mod commit_tree;
 pub mod compression;
 pub mod init;

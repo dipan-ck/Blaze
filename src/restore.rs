@@ -11,6 +11,15 @@ struct Entry {
     hash_hex: String,
 }
 
+/*
+  The restore command takes a path root path and in this case we assume that the root path user is provding is the repo they want to restore so,
+  first we look at the .blitz/HEAD file which contains the latest commit Hash we take extract that hash and find the commit object now in the commit Object
+  body we have the tree that commit was done for so extract the tree Hash we read the tree Object on the restore function and we create the root folder and it's
+  files directly but the moment we see the root tree Oabject had a folder we call the recursive builder which almost folows the same logic as the restore function's
+  root tree to folder creation.
+
+*/
+
 impl Entry {
     fn new(mode: String, name: String, hash: Vec<u8>, hash_hex: String) -> Entry {
         Entry {

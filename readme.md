@@ -77,14 +77,14 @@ Git stores everything as objects in the `.git/objects` directory (`.blitz/object
 
 **In Blitz, all object types are implemented except for the Tag object.**
 
-<br><br>
+<br>
 
 ### Data Structures Used
 - **Blob objects**: Raw file content compressed with zlib
 - **Tree objects**: List of entries (mode, type, hash, name)
 - **Commit objects**: Tree hash + parent hash + author + message + timestamp. In this Project we have hardcoded a dummy user data for commits.
 
-<br><br>
+<br>
 
 ### Content-Addressable Storage
 Instead of storing files by name, Blitz (like Git) stores everything by the SHA-1 hash of its contents. The Hash is computed from the object's contents.
@@ -93,7 +93,7 @@ Instead of storing files by name, Blitz (like Git) stores everything by the SHA-
 - **Integrity verification**: You can verify data hasn't been corrupted by recomputing the hash and comparing it to the stored one
 - **Immutability**: Since the hash is derived from the content, you can't change an object without changing its hash—making the entire history tamper-evident
 
-<br><br>
+<br>
 
 ### How a Commit Works
 1. Files are hashed and stored as blob objects
@@ -101,7 +101,7 @@ Instead of storing files by name, Blitz (like Git) stores everything by the SHA-
 3. A commit object points to the root tree and contains metadata
 4. .blitz/HEAD contains the hash of the latest Commit (but in case git it's a bit different)
 
-<br><br>
+<br>
 
 ### Directory Structure
 ```

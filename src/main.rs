@@ -1,8 +1,9 @@
-use std::env;
-
 use blaze::run;
+use std::env;
+use tokio;
 
-fn main() {
-    let args = env::args().collect();
-    run(args);
+#[tokio::main]
+async fn main() {
+    let args: Vec<String> = env::args().collect();
+    run(args).await;
 }

@@ -1,6 +1,7 @@
 use crate::{
     blob_object::{create_blob_object, hash_object},
     cat_file::cat_file,
+    clone::clone,
     commit_tree::{commit_tree, initial_commit_tree},
     init::init,
     ls_tree::ls_tree,
@@ -10,6 +11,7 @@ use crate::{
 
 pub mod blob_object;
 pub mod cat_file;
+pub mod clone;
 pub mod commit_tree;
 pub mod compression;
 pub mod init;
@@ -39,7 +41,7 @@ SUPPORTED COMMANDS:
 
  */
 
-pub fn run(args: Vec<String>) {
+pub async fn run(args: Vec<String>) {
     let args: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
 
     match args.as_slice() {
@@ -65,7 +67,11 @@ pub fn run(args: Vec<String>) {
             commit_message,
         ] => commit_tree(tree_hash, parent_commit_hash, commit_message),
         [_, "restore", root_path] => restore(root_path),
-
+        [_, "clone", base_url] => {
+            if let Err(e) = clone(base_url).await {
+                eprintln!("clone failed: {e}");
+            }
+        }
         _ => eprintln!("unknown command"),
     }
 }
